@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Compressor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <section class="hero">
+      <div>
+        <h1>Canvas Image Compressor</h1>
+        <p>Drop files, tune quality and width, then compress and download everything in one pass. All processing runs entirely in your browser.</p>
+      </div>
+      <div class="chip" id="fileCount">0 images loaded</div>
+    </section>
+
+    <section class="card upload-card">
+      <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Drag and drop images here or click to browse">
+        <svg class="upload-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M31 44V18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          <path d="M20 29L31 18L42 29" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="10" y="44" width="44" height="10" rx="5" stroke="currentColor" stroke-width="4"/>
+        </svg>
+        <h2>Drag and drop images</h2>
+        <p>Supports JPG, JPEG, PNG, and WEBP files</p>
+        <button class="browse-btn" id="browseBtn" type="button" aria-label="Click to browse images">Click to Browse</button>
+        <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden />
+      </div>
+    </section>
+
+    <section class="card controls" aria-label="Compression controls">
+      <div class="control quality">
+        <h3>Compression Quality <span id="qualityValue" class="value">75</span></h3>
+        <div class="range-wrap">
+          <label class="sr-only" for="qualitySlider">Compression Quality</label>
+          <input id="qualitySlider" type="range" min="1" max="100" value="75" aria-describedby="qualityHelp" />
+          <div class="range-labels" id="qualityHelp"><span>Smaller File</span><span>Higher Quality</span></div>
+        </div>
+      </div>
+
+      <div class="control width">
+        <h3>Max Width (px) <span id="widthValue" class="value">1920</span></h3>
+        <div class="range-wrap">
+          <label class="sr-only" for="maxWidthSlider">Max Width in pixels</label>
+          <input id="maxWidthSlider" type="range" min="100" max="4000" value="1920" />
+        </div>
+      </div>
+
+      <div class="control format">
+        <h3>Output Format</h3>
+        <div class="format-pills" role="radiogroup" aria-label="Output format">
+          <button type="button" class="format-pill active" data-format="image/jpeg" aria-pressed="true">JPEG</button>
+          <button type="button" class="format-pill" data-format="image/png" aria-pressed="false">PNG</button>
+          <button type="button" class="format-pill" data-format="image/webp" aria-pressed="false">WEBP</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="compressAllBtn" disabled>
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Compress All</span>
+        </button>
+        <button type="button" class="btn" id="downloadAllBtn" disabled>Download All</button>
+        <button type="button" class="btn" id="clearAllBtn" disabled>Clear All</button>
+      </div>
+    </section>
+
+    <section class="card grid-card">
+      <div class="grid-header">
+        <h2>Image Queue</h2>
+        <p id="statusText">Add images to begin compression</p>
+      </div>
+      <div id="emptyState" class="empty">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="8" y="12" width="48" height="40" rx="8" stroke="currentColor" stroke-width="3" opacity="0.7"/>
+          <circle cx="23" cy="26" r="4" stroke="currentColor" stroke-width="3" opacity="0.7"/>
+          <path d="M16 44L30 32L38 38L46 30L54 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+        </svg>
+        <h3>No images loaded yet</h3>
+        <p>Drop files above or click to browse and your queue will appear here.</p>
+      </div>
+      <div id="previewGrid" class="preview-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <section class="summary" aria-label="Compression summary">
+    <div class="summary-inner">
+      <div class="stat">
+        <small>Total Original</small>
+        <strong id="totalOriginal">0 KB</strong>
+      </div>
+      <div class="stat">
+        <small>Total Compressed</small>
+        <strong id="totalCompressed">0 KB</strong>
+      </div>
+      <div class="stat saved">
+        <small>Space Saved</small>
+        <strong id="totalSaved">0 KB (0%)</strong>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">All images compressed!</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
